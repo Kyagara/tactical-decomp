@@ -12,7 +12,7 @@
 
 I've always wanted to try my hands at a decomp project and FFT is easily my favorite game of all time, I even tried years and years ago matching some functions for the fun of it, now that and easily accessible and, in some cases, a good "replacement" of the original game is available on major platforms, and I have tokens to spare, I tried to force a decomp out.
 
-My goal is first and foremost this decomp, with the [recomp/README.md](recomp/README.md) an afterthought (though I am currently in the process of verifying if it doesn't contain major bugs/unplayable). I wished for an actual port, but a wish is all it will be, that would be an entirely different beast.
+My goal is first and foremost this decomp, with the [recomp](recomp) an afterthought (though I am currently in the process of verifying if it doesn't contain major bugs/unplayable). I wished for an actual port, but a wish is all it will be, that would be an entirely different beast.
 
 This project was entirely vibe coded and has hit a 'slow grind' part, I am mostly in the process of removing unecessary/not needed anymore things made along the way and cutting down on the overly verbose nature of LLMs.
 
