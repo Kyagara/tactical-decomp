@@ -1,0 +1,58 @@
+name: E453.BIN
+sha1: e52f7ae67b02c2d172e07471a78e6c316724385b
+options:
+  basename: E453.BIN
+  target_path: rom/extracted/baserom/EFFECT/E453.BIN
+  elf_path: build/blobs/effect_E453/effect_E453.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E453
+
+  ld_script_path: build/blobs/effect_E453/effect_E453.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E453.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E453/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E453/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E453
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E453]
+
+  - name: E453_data
+    type: data
+    align: 0
+    start: 0x4604
+    vram: 0x801C6B04
+    subsegments:
+      - [0x4604, data, E453_data]
+
+  - [0x10C3C]

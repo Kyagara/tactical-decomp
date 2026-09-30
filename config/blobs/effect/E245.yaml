@@ -1,0 +1,58 @@
+name: E245.BIN
+sha1: e5c5270e619182307ca81afb6e3634415a05c779
+options:
+  basename: E245.BIN
+  target_path: rom/extracted/baserom/EFFECT/E245.BIN
+  elf_path: build/blobs/effect_E245/effect_E245.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E245
+
+  ld_script_path: build/blobs/effect_E245/effect_E245.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E245.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E245/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E245/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E245
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E245]
+
+  - name: E245_data
+    type: data
+    align: 0
+    start: 0x1EF0
+    vram: 0x801C43F0
+    subsegments:
+      - [0x1EF0, data, E245_data]
+
+  - [0xD3F8]

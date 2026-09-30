@@ -1,0 +1,58 @@
+name: E384.BIN
+sha1: a976354237552e6dd4f76680345fcfc649f3d739
+options:
+  basename: E384.BIN
+  target_path: rom/extracted/baserom/EFFECT/E384.BIN
+  elf_path: build/blobs/effect_E384/effect_E384.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E384
+
+  ld_script_path: build/blobs/effect_E384/effect_E384.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E384.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E384/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E384/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E384
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E384]
+
+  - name: E384_data
+    type: data
+    align: 0
+    start: 0x40CC
+    vram: 0x801C65CC
+    subsegments:
+      - [0x40CC, data, E384_data]
+
+  - [0x17E3C]

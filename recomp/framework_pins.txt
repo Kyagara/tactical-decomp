@@ -1,0 +1,6 @@
+psxrecomp=b2952537 (b2952537ff0a40e2d4ac2dce6f78679e6e95f092)
+psxrecomp-upstream-base=0ffab1ce (0ffab1ceb9e3b42de9f87a7a416e8e8d95f64f00)
+psxrecomp-local-patch=patches/psxrecomp/0ffab1ce-spu-pmon.patch
+recomp-ui=65833d7 (65833d7401510c3e1151b9f6d8e539f19183d8b1)
+recomp-net=<present, not a git checkout>
+retcomm-rbengine=<present, not a git checkout>

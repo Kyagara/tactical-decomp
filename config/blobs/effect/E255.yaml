@@ -1,0 +1,58 @@
+name: E255.BIN
+sha1: 7d8797873394888aa4cf36aea2c8d4607049ab36
+options:
+  basename: E255.BIN
+  target_path: rom/extracted/baserom/EFFECT/E255.BIN
+  elf_path: build/blobs/effect_E255/effect_E255.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E255
+
+  ld_script_path: build/blobs/effect_E255/effect_E255.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E255.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E255/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E255/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E255
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E255]
+
+  - name: E255_data
+    type: data
+    align: 0
+    start: 0x14F8
+    vram: 0x801C39F8
+    subsegments:
+      - [0x14F8, data, E255_data]
+
+  - [0xCCD8]

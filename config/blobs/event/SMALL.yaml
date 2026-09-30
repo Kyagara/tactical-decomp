@@ -1,0 +1,58 @@
+name: SMALL.OUT
+sha1: 159a456cedb7894ab1c84a7929fbef88c058b1ee
+options:
+  basename: SMALL.OUT
+  target_path: rom/extracted/baserom/EVENT/SMALL.OUT
+  elf_path: build/blobs/event_SMALL/event_SMALL.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_SMALL
+
+  ld_script_path: build/blobs/event_SMALL/event_SMALL.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/SMALL.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_SMALL/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_SMALL/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: SMALL
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, c, SMALL]
+
+  - name: SMALL_data
+    type: data
+    align: 0
+    start: 0x6C
+    vram: 0x8006006C
+    subsegments:
+      - [0x6C, data, SMALL_data]
+
+  - [0x1ED3]

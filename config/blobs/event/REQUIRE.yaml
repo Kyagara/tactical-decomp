@@ -1,0 +1,66 @@
+name: REQUIRE.OUT
+sha1: 5f204ad619fe4182032ac90bf099e3882c068aba
+options:
+  basename: REQUIRE.OUT
+  target_path: rom/extracted/baserom/EVENT/REQUIRE.OUT
+  elf_path: build/blobs/event_REQUIRE/event_REQUIRE.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_REQUIRE
+
+  ld_script_path: build/blobs/event_REQUIRE/event_REQUIRE.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/REQUIRE.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_REQUIRE/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_REQUIRE/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: REQUIRE_hdr
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, REQUIRE_hdr]
+
+  - name: REQUIRE
+    type: code
+    align: 0
+    start: 0x24
+    vram: 0x80060024
+    subsegments:
+      - [0x24, c, REQUIRE]
+
+  - name: REQUIRE_data
+    type: data
+    align: 0
+    start: 0xC2CC
+    vram: 0x8006C2CC
+    subsegments:
+      - [0xC2CC, data, REQUIRE_data]
+
+  - [0x1F2C4]

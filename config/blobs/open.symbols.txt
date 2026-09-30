@@ -1,0 +1,207 @@
+// OPEN.BIN-local symbols (hand-maintained, like config/symbol_addrs.txt).
+// 117 negative-imm prologue entries in the carved code ranges plus
+// func_8006C73C (cross-range sibcall entry needing a global label).
+// The exe file is deliberately NOT included here (0x80060000 arena
+// aliasing); exe cross-refs resolve via --defsym synthesis.
+// Seeding recipe: docs/BLOB_PLAN.md section 11.
+func_800600F0 = 0x800600F0;
+func_8006020C = 0x8006020C;
+func_80060320 = 0x80060320;
+// hand-added address fix (class 3.4 "late stub start"): the real entry is
+// 80060484, not 8006048C.  splat had started 6048C at 0x6048C, so the
+// function's first two instructions --
+//     lui $v0,%hi(D_8008E53C) ; lw $v0,%lo(D_8008E53C)($v0)
+// -- were absorbed into the trailing no-jr fragment of func_80060320 (whose
+// own `jr ra` is at 8006047C).  That is why the stub appeared to begin with
+// `andi $v0,$v0,0x2`, reading an uninitialised $v0 and looking like a
+// non-ABI entry -- an impossible signature that had made 6048C look
+// unlandable.  The body is in fact `if (D_8008E53C & 2) { ... }`, plain C.
+func_8006048C = 0x80060484;
+func_800605BC = 0x800605BC;
+func_80060628 = 0x80060628;
+func_800606F8 = 0x800606F8;
+func_800607D4 = 0x800607D4;
+func_8006092C = 0x8006092C;
+func_800609A0 = 0x800609A0;
+func_80060B38 = 0x80060B38;
+func_80060BD0 = 0x80060BD0;
+func_80060C24 = 0x80060C24;
+func_80060D84 = 0x80060D84;
+func_80060E68 = 0x80060E68;
+func_80060E90 = 0x80060E90;
+func_80060EB8 = 0x80060EB8;
+// hand-added: func_80060EB8's own `jr ra` is at 8006121C and 80061220-80061384
+// is a SEPARATE uncalled 89-instruction body carrying all THREE of the
+// `j .L8006837C` computed gotos into the interior of the parked fragment
+// func_80068230 (+0x14C).  splat merged them, so 60EB8 looked like one
+// unlandable function.  With the split: the head 80060EB8-80061220 (136 insns)
+// is CLEAN -- 4 branches, 6 calls out of the unit, no j-to-data, no interior
+// goto -- and the tail stays parked.
+func_80061220 = 0x80061220; // size:0x48
+// hand-added: func_80061220's own `jr ra` is at 80061260 and
+// 80061268-80061384 is a SEPARATE uncalled 71-instruction body.  That body
+// carries all THREE `j .L8006837C` computed gotos into the interior of the
+// parked fragment func_80068230 (+0x14C), so it is unlandable.  Splitting it
+// off leaves 61220 as a clean 18-instruction initialiser: two `lbu` loads and
+// six scalar stores, no branches, no calls, no j-to-data, no interior goto,
+// 0 cross-refs.  Census: 80061220 is referenced by nothing in the blob.
+func_80061268 = 0x80061268; // size:0x11C
+func_80061384 = 0x80061384;
+// Second, prologue-less entry of the func_80061384 region (0x1420): a
+// frameless helper that ends in `j .L80068544` (into func_80068420).
+// splat folds it into func_80061384's stub because it has no `addiu sp`;
+// naming it splits the stub so the real function can be decompiled and
+// the helper kept as asm.
+func_80061420 = 0x80061420;
+func_80061554 = 0x80061554;
+func_800615EC = 0x800615EC;
+func_80061638 = 0x80061638;
+func_80061684 = 0x80061684;
+func_800616DC = 0x800616DC;
+func_80061760 = 0x80061760;
+func_800617AC = 0x800617AC;
+// hand-added: func_800617AC's own `jr ra` is at 80061AE8 and 80061AEC-80061B74
+// is a SEPARATE uncalled 34-instruction body: a flat run of 13 scalar stores to
+// globals, no branches, no calls, no j-to-data and no interior goto.  splat had
+// merged it into 617AC, which is itself unlandable (three `j .L80068A54` into
+// 68A10's interior).  With the split, 617AC is the unlandable head and
+// 61AEC is a plain initialiser that should land.  Census: 0 cross-refs.
+func_80061AEC = 0x80061AEC; // size:0x88
+func_80061B74 = 0x80061B74;
+func_80061BB0 = 0x80061BB0;
+func_80061C90 = 0x80061C90;
+func_80061CD8 = 0x80061CD8;
+func_80061D80 = 0x80061D80;
+// hand-added address fix (class 3.4 "late stub start"): the real entry is
+// 0x8006220C, not 0x80062214.  splat had started func_80062214 8 bytes late, so the function's
+// first two instructions were absorbed into the trailing no-jr fragment of
+// the preceding stub (whose own `jr ra` precedes them).
+func_80062214 = 0x8006220C;
+func_800629D4 = 0x800629D4;
+func_80062A34 = 0x80062A34;
+func_80062A90 = 0x80062A90;
+func_80062B6C = 0x80062B6C;
+func_80062C38 = 0x80062C38;
+func_80062CC8 = 0x80062CC8;
+func_80062D38 = 0x80062D38;
+func_80062D7C = 0x80062D7C;
+func_80062E60 = 0x80062E60;
+func_80062EBC = 0x80062EBC;
+func_80062F24 = 0x80062F24;
+func_80062FE0 = 0x80062FE0;
+func_80063074 = 0x80063074;
+func_800630E8 = 0x800630E8;
+func_80063174 = 0x80063174;
+// hand-added: func_80063174's own `jr ra` is at 80063570, and 80063578-80063668
+// is a SECOND function body that no branch in 63174 reaches and nothing in the
+// blob calls (0 jalr sites in OPEN, 0 cross-refs).  Without this symbol splat
+// merged ~62 instructions of unreachable code into func_80063174, which no
+// single plain-C function can reproduce (cc1 would delete it).  Own `jr ra`.
+func_80063578 = 0x80063578;
+func_80063670 = 0x80063670;
+D_80063768 = 0x80063768;
+func_80063770 = 0x80063770;
+func_80063EF8 = 0x80063EF8;
+func_800640A4 = 0x800640A4;
+func_80064358 = 0x80064358;
+func_80064420 = 0x80064420;
+func_8006463C = 0x8006463C;
+func_80064990 = 0x80064990;
+func_80064B74 = 0x80064B74;
+func_80064BF8 = 0x80064BF8;
+func_80064C9C = 0x80064C9C;
+func_80064DB4 = 0x80064DB4;
+func_80064DE0 = 0x80064DE0;
+func_800650D0 = 0x800650D0;
+// hand-added address fix (class 3.4 "late stub start"): the real entry is
+// 0x80065464, not 0x8006546C.  splat had started func_8006546C 8 bytes late, so the function's
+// first two instructions were absorbed into the trailing no-jr fragment of
+// the preceding stub (whose own `jr ra` precedes them).
+func_8006546C = 0x80065464;
+func_80065750 = 0x80065750;
+func_800658A8 = 0x800658A8;
+func_8006596C = 0x8006596C;
+func_800659C4 = 0x800659C4;
+func_80065A2C = 0x80065A2C;
+func_80065B00 = 0x80065B00;
+func_80065BF8 = 0x80065BF8;
+func_80065DB4 = 0x80065DB4;
+func_80065EF0 = 0x80065EF0;
+// GCC 2.6 hoists the first global load of the NEXT function above its
+// prologue, so the `lui v1 / lw v1` pair lands in the previous
+// function's post-jr dead range. The prologue scan then carves
+// func_80066264 at 0x6264 and leaves 0x625C-0x6260 as func_80065EF0's
+// dead tail. Naming the real entry here puts the load back inside
+// func_80066264's own C, which reproduces those 8 bytes exactly.
+func_8006625C = 0x8006625C;
+func_80066264 = 0x80066264;
+func_80066360 = 0x80066360;
+func_800663CC = 0x800663CC;
+func_80066488 = 0x80066488;
+func_80066524 = 0x80066524;
+func_80066660 = 0x80066660;
+func_800667AC = 0x800667AC;
+D_800667EC = 0x800667EC;
+func_800667F4 = 0x800667F4;
+func_80066B84 = 0x80066B84;
+func_80067068 = 0x80067068;
+func_8006713C = 0x8006713C;
+func_800672F0 = 0x800672F0;
+func_800677E0 = 0x800677E0;
+func_800678B0 = 0x800678B0;
+func_80067B9C = 0x80067B9C;
+func_80068134 = 0x80068134;
+func_80068230 = 0x80068230;
+func_80068598 = 0x80068598;
+func_800685D4 = 0x800685D4;
+func_800685EC = 0x800685EC;
+func_8006879C = 0x8006879C;
+func_800688E0 = 0x800688E0;
+func_8006891C = 0x8006891C;
+func_80068990 = 0x80068990;
+func_80068A10 = 0x80068A10;
+func_80068AA0 = 0x80068AA0;
+func_80068B40 = 0x80068B40;
+func_80068D9C = 0x80068D9C;
+func_80068DE0 = 0x80068DE0; // size:0x44
+// hand-added: func_80068DE0's own `jr ra` is at 80068E1C, and 80068E24-80068F34
+// is a SEPARATE uncalled function body that nothing branches or jumps to
+// (0 cross-refs blob-wide).  splat had merged it into 68DE0, which made 68DE0
+// look like a 85-insn j-to-data stub (the merged tail has two `j D_8006FEAC`).
+// With the split, 68DE0 is a clean 17-insn function with no j-to-data and no
+// interior goto.  The new 68E24 body keeps the j-to-data and stays parked.
+func_80068E24 = 0x80068E24; // size:0x110
+func_80068F34 = 0x80068F34;
+func_80068FE4 = 0x80068FE4;
+func_80069020 = 0x80069020;
+func_8006905C = 0x8006905C;
+func_80069100 = 0x80069100;
+func_80069128 = 0x80069128;
+func_8006929C = 0x8006929C;
+func_800692B8 = 0x800692B8;
+func_800692E8 = 0x800692E8;
+func_800693A0 = 0x800693A0;
+func_800693F0 = 0x800693F0;
+func_80069448 = 0x80069448;
+func_80069500 = 0x80069500;
+func_80069550 = 0x80069550;
+func_800695A0 = 0x800695A0;
+func_80069628 = 0x80069628;
+func_80069634 = 0x80069634;
+func_800696E8 = 0x800696E8;
+func_8006977C = 0x8006977C;
+func_8006C48C = 0x8006C48C;
+func_8006C550 = 0x8006C550;
+func_8006C5F8 = 0x8006C5F8;
+func_8006C674 = 0x8006C674;
+func_8006C694 = 0x8006C694;
+func_8006C6B4 = 0x8006C6B4;
+func_8006C6D4 = 0x8006C6D4;
+func_8006C6F8 = 0x8006C6F8;
+func_8006C71C = 0x8006C71C;
+func_8006C73C = 0x8006C73C;
+func_8006C818 = 0x8006C818;
+func_8006C8AC = 0x8006C8AC;
+func_8006C93C = 0x8006C93C;
+func_8006C9D4 = 0x8006C9D4;
+func_8006CA6C = 0x8006CA6C;

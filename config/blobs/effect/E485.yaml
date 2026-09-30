@@ -1,0 +1,58 @@
+name: E485.BIN
+sha1: b4f9809d0cd8aabcf54e83dc9f2bbb925456361a
+options:
+  basename: E485.BIN
+  target_path: rom/extracted/baserom/EFFECT/E485.BIN
+  elf_path: build/blobs/effect_E485/effect_E485.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E485
+
+  ld_script_path: build/blobs/effect_E485/effect_E485.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E485.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E485/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E485/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E485
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E485]
+
+  - name: E485_data
+    type: data
+    align: 0
+    start: 0x2BC8
+    vram: 0x801C50C8
+    subsegments:
+      - [0x2BC8, data, E485_data]
+
+  - [0xF310]

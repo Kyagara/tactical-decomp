@@ -1,0 +1,58 @@
+name: E408.BIN
+sha1: 1caebeb25b61ec2c28778af407eaf2d5248d40c2
+options:
+  basename: E408.BIN
+  target_path: rom/extracted/baserom/EFFECT/E408.BIN
+  elf_path: build/blobs/effect_E408/effect_E408.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E408
+
+  ld_script_path: build/blobs/effect_E408/effect_E408.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E408.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E408/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E408/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E408
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E408]
+
+  - name: E408_data
+    type: data
+    align: 0
+    start: 0x1EF0
+    vram: 0x801C43F0
+    subsegments:
+      - [0x1EF0, data, E408_data]
+
+  - [0x169D0]

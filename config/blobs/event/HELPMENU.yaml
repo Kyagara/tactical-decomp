@@ -1,0 +1,58 @@
+name: HELPMENU.OUT
+sha1: 7cb7a4c11371dc74c80f6911486e5a7ce65026b5
+options:
+  basename: HELPMENU.OUT
+  target_path: rom/extracted/baserom/EVENT/HELPMENU.OUT
+  elf_path: build/blobs/event_HELPMENU/event_HELPMENU.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_HELPMENU
+
+  ld_script_path: build/blobs/event_HELPMENU/event_HELPMENU.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/HELPMENU.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_HELPMENU/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_HELPMENU/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: HELPMENU
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, c, HELPMENU]
+
+  - name: HELPMENU_data
+    type: data
+    align: 0
+    start: 0x15D8
+    vram: 0x800615D8
+    subsegments:
+      - [0x15D8, data, HELPMENU_data]
+
+  - [0x18584]

@@ -1,0 +1,84 @@
+name: OPEN.BIN
+sha1: 5da122a0f25bc5e30eb08830a22f5493d8d5d619
+# maspsx --aspsx-version pin (exe default is 2.34).
+aspsx_version: "2.21"
+options:
+  basename: OPEN.BIN
+  target_path: rom/extracted/baserom/OPEN/OPEN.BIN
+  elf_path: build/blobs/open/open.elf
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/open
+  src_path: src/blobs/open
+  build_path: build/blobs/open
+
+  ld_script_path: build/blobs/open/open.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/open.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/open/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/open/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+segments:
+  - name: open_tables
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, open_tables]
+
+  - name: open
+    type: code
+    align: 0
+    start: 0xF0
+    vram: 0x800600F0
+    subsegments:
+      - [0xF0, c, open]
+      - [0x8D9C, c, open_2]
+      - [0x905C, c, open_3]
+
+  - name: open_mid
+    type: data
+    align: 0
+    start: 0x97F8
+    vram: 0x800697F8
+    subsegments:
+      - [0x97F8, data, open_mid]
+
+  - name: open_4
+    type: code
+    align: 0
+    start: 0xC48C
+    vram: 0x8006C48C
+    subsegments:
+      - [0xC48C, c, open_4]
+
+  - name: open_data
+    type: data
+    align: 0
+    start: 0xCF10
+    vram: 0x8006CF10
+    subsegments:
+      - [0xCF10, data, open_data]
+
+  - [0x36670]

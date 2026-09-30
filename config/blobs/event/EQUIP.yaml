@@ -1,0 +1,66 @@
+name: EQUIP.OUT
+sha1: 5e833802b1a9f3fb096a41a64e52228dbc89ff05
+options:
+  basename: EQUIP.OUT
+  target_path: rom/extracted/baserom/EVENT/EQUIP.OUT
+  elf_path: build/blobs/event_EQUIP/event_EQUIP.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_EQUIP
+
+  ld_script_path: build/blobs/event_EQUIP/event_EQUIP.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/EQUIP.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_EQUIP/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_EQUIP/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: EQUIP_hdr
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, EQUIP_hdr]
+
+  - name: EQUIP
+    type: code
+    align: 0
+    start: 0x4
+    vram: 0x80060004
+    subsegments:
+      - [0x4, c, EQUIP]
+
+  - name: EQUIP_data
+    type: data
+    align: 0
+    start: 0xF0E0
+    vram: 0x8006F0E0
+    subsegments:
+      - [0xF0E0, data, EQUIP_data]
+
+  - [0x2A354]

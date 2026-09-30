@@ -1,0 +1,95 @@
+# Aligned with recomp/.gitignore (psxrecomp game template), plus the decomp's
+# own generated trees. Runs from the repo root, so a disc dump or a build dir
+# created by either pipeline is ignored no matter which one made it.
+
+# --- disc (decomp: the retail dump; recomp: staged media) ---
+/rom/
+/bios/
+/isos/
+/saves/
+/prepared_disc/
+/disc/
+/analysis/
+.settings/
+
+# Disc / image / memcard formats
+*.bin
+*.cue
+*.iso
+*.img
+*.sub
+*.ccd
+*.mcd
+*.mcr
+*.chd
+*.car
+SCPH*.BIN
+
+# --- build outputs (decomp `build/`, recomp `build-*/`, out/, staged mods) ---
+/build/
+/build-*/
+/out/
+/.happypath/
+/generated/
+/.cache/
+/release-stage/
+/dist/
+*.zip
+
+# Permuter farms (logs, scratch, candidate outputs)
+/output/
+
+# Tooling installs
+/tools/toolchain/
+
+# Local path/config stubs
+bios.cfg
+disc.cfg
+rom.cfg
+settings.toml
+
+# --- analysis scratch ---
+/ghidra/projects/
+*.gpr
+*.rep/
+*.lock
+*.lock~
+
+# --- runtime artifacts from psx-runtime launches ---
+psx_crash.txt
+psx_last_run_report.json
+psx_screenshot.bmp
+psx_freeze_heartbeat.json
+.psxrecomp_last_generate
+.psxrecomp_write_probe
+starvation_dump.jsonl
+
+# Regenerated artifacts
+*.m2c
+
+# Python
+__pycache__/
+*.pyc
+.venv
+
+# CMake / build tools
+CMakeCache.txt
+CMakeFiles/
+compile_commands.json
+
+# Diagnostic dumps (root-level) - keep catalog / probe trackable
+/*.json
+/*.bmp
+/*.png
+!/catalog_identity.json
+!/disc_probe.json
+!/.recomp.json
+
+# Editor / OS
+.vs/
+.vscode/
+*.user
+*.log
+.idea/
+.DS_Store
+*.swp

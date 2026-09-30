@@ -1,0 +1,12 @@
+diff --git a/crates/cli/src/main.rs b/crates/cli/src/main.rs
+index cb0ec6f..c55cc68 100644
+--- a/crates/cli/src/main.rs
++++ b/crates/cli/src/main.rs
+@@ -583,6 +583,7 @@ async fn main() -> Result<()> {
+             let opcodes = core::arch::get_opcodes_raw(&query_bin_data, platform);
+             for (i, hash) in core::get_hashes(&opcodes, window_size).iter().enumerate() {
+                 if let Some((project_name, version_name, symbol)) = symbol_hashes.get(hash)
++                    && i + symbol.opcodes.len() <= opcodes.len()
+                     && opcodes[i..i + symbol.opcodes.len()] == symbol.opcodes
+                 {
+                     println!(

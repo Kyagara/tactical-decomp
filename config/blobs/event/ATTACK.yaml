@@ -1,0 +1,66 @@
+name: ATTACK.OUT
+sha1: 7ed99d28fde683d58d0c820cd24cce11f9d228d9
+options:
+  basename: ATTACK.OUT
+  target_path: rom/extracted/baserom/EVENT/ATTACK.OUT
+  elf_path: build/blobs/event_ATTACK/event_ATTACK.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_ATTACK
+
+  ld_script_path: build/blobs/event_ATTACK/event_ATTACK.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/ATTACK.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_ATTACK/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_ATTACK/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: ATTACK_hdr
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, ATTACK_hdr]
+
+  - name: ATTACK
+    type: code
+    align: 0
+    start: 0xC
+    vram: 0x8006000C
+    subsegments:
+      - [0xC, c, ATTACK]
+
+  - name: ATTACK_data
+    type: data
+    align: 0
+    start: 0xAF8C
+    vram: 0x8006AF8C
+    subsegments:
+      - [0xAF8C, data, ATTACK_data]
+
+  - [0x1EC04]

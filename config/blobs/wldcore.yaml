@@ -1,0 +1,85 @@
+name: WLDCORE.BIN
+sha1: 575484c138199c8ac8a92c3e2980678a67525e0c
+# maspsx --aspsx-version pin (exe default is 2.34).
+aspsx_version: "2.21"
+options:
+  basename: WLDCORE.BIN
+  target_path: rom/extracted/baserom/WORLD/WLDCORE.BIN
+  elf_path: build/blobs/wldcore/wldcore.elf
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/wldcore
+  src_path: src/blobs/wldcore
+  build_path: build/blobs/wldcore
+
+  ld_script_path: build/blobs/wldcore/wldcore.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/wldcore.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/wldcore/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/wldcore/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+segments:
+  - name: wldcore_tables
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80067000
+    subsegments:
+      - [0x0, data, wldcore_tables]
+
+  - name: wldcore
+    type: code
+    align: 0
+    start: 0x2F8
+    vram: 0x800672F8
+    subsegments:
+      - [0x2F8, c, wldcore]
+      - [0x6F4C, c, wldcore_2]
+      - [0x13F9C, c, wldcore_3]
+      - [0x245F4, c, wldcore_4]
+
+  - name: wldcore_mid
+    type: data
+    align: 0
+    start: 0x2BB2C
+    vram: 0x80092B2C
+    subsegments:
+      - [0x2BB2C, data, wldcore_mid]
+
+  - name: wldcore_5
+    type: code
+    align: 0
+    start: 0x36E1C
+    vram: 0x8009DE1C
+    subsegments:
+      - [0x36E1C, c, wldcore_5]
+
+  - name: wldcore_data
+    type: data
+    align: 0
+    start: 0x370EC
+    vram: 0x8009E0EC
+    subsegments:
+      - [0x370EC, data, wldcore_data]
+
+  - [0x6D928]

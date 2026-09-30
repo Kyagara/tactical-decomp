@@ -1,0 +1,13 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Final Fantasy Tactics",
+  "system": "PS1",
+  "type": "recomp",
+  "toolchain": "psxrecomp",
+  "status": "exploring",
+  "project": "tactical-recomp",
+  "original": {
+    "region": "USA",
+    "serial": "SCUS-94221"
+  }
+}

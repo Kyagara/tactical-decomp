@@ -1,0 +1,58 @@
+name: E080.BIN
+sha1: 5e487760b5756c21fb236873ae06f70570f0f92d
+options:
+  basename: E080.BIN
+  target_path: rom/extracted/baserom/EFFECT/E080.BIN
+  elf_path: build/blobs/effect_E080/effect_E080.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E080
+
+  ld_script_path: build/blobs/effect_E080/effect_E080.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E080.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E080/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E080/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E080
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E080]
+
+  - name: E080_data
+    type: data
+    align: 0
+    start: 0x28B0
+    vram: 0x801C4DB0
+    subsegments:
+      - [0x28B0, data, E080_data]
+
+  - [0x1684C]

@@ -1,0 +1,128 @@
+name: BATTLE.BIN
+sha1: 402d4b7fb5aeb9032cad1ae95a9cd2894ea4a6ca
+options:
+  basename: BATTLE.BIN
+  target_path: rom/extracted/baserom/BATTLE.BIN
+  elf_path: build/blobs/battle/battle.elf
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/battle
+  src_path: src/blobs/battle
+  build_path: build/blobs/battle
+
+  ld_script_path: build/blobs/battle/battle.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/battle.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/battle/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/battle/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+segments:
+  - name: battle_tables
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, battle_tables]
+
+  - name: battle
+    type: code
+    align: 0
+    start: 0x13D4
+    vram: 0x800613D4
+    subsegments:
+      - [0x13D4, c, battle]
+
+  - name: battle_data1
+    type: data
+    align: 0
+    start: 0x2CC98
+    vram: 0x8008CC98
+    subsegments:
+      - [0x2CC98, data, battle_data1]
+
+  - name: battle_2
+    type: code
+    align: 0
+    start: 0x802A0
+    vram: 0x800E02A0
+    subsegments:
+      - [0x802A0, c, battle_2]
+
+  - name: battle_data2
+    type: data
+    align: 0
+    start: 0x8EAEC
+    vram: 0x800EEAEC
+    subsegments:
+      - [0x8EAEC, data, battle_data2]
+
+  - name: battle_3
+    type: code
+    align: 0
+    start: 0xC5C54
+    vram: 0x80125C54
+    subsegments:
+      - [0xC5C54, c, battle_3]
+
+  - name: battle_data3
+    type: data
+    align: 0
+    start: 0xE5F68
+    vram: 0x80145F68
+    subsegments:
+      - [0xE5F68, data, battle_data3]
+
+  - name: battle_4
+    type: code
+    align: 0
+    start: 0x10D370
+    vram: 0x8016D370
+    subsegments:
+      - [0x10D370, c, battle_4]
+
+  - name: battle_mid_d
+    type: data
+    align: 0
+    start: 0x1284D8
+    vram: 0x801884D8
+    subsegments:
+      - [0x1284D8, data, battle_mid_d]
+
+  - name: battle_5
+    type: code
+    align: 0
+    start: 0x12CE50
+    vram: 0x8018CE50
+    subsegments:
+      - [0x12CE50, c, battle_5]
+
+  - name: battle_tail
+    type: data
+    align: 0
+    start: 0x14D8D0
+    vram: 0x801AD8D0
+    subsegments:
+      - [0x14D8D0, data, battle_tail]
+
+  - [0x155168]

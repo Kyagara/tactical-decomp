@@ -1,0 +1,66 @@
+name: DEBUGCHR.OUT
+sha1: d1560d2f658f191691c9684d60fab96da4243c0b
+options:
+  basename: DEBUGCHR.OUT
+  target_path: rom/extracted/baserom/EVENT/DEBUGCHR.OUT
+  elf_path: build/blobs/event_DEBUGCHR/event_DEBUGCHR.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_DEBUGCHR
+
+  ld_script_path: build/blobs/event_DEBUGCHR/event_DEBUGCHR.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/DEBUGCHR.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_DEBUGCHR/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_DEBUGCHR/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: DEBUGCHR_hdr
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, DEBUGCHR_hdr]
+
+  - name: DEBUGCHR
+    type: code
+    align: 0
+    start: 0x8
+    vram: 0x80060008
+    subsegments:
+      - [0x8, c, DEBUGCHR]
+
+  - name: DEBUGCHR_data
+    type: data
+    align: 0
+    start: 0x6244
+    vram: 0x80066244
+    subsegments:
+      - [0x6244, data, DEBUGCHR_data]
+
+  - [0xFCF4]

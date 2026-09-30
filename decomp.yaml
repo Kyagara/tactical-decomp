@@ -1,0 +1,15 @@
+name: Final Fantasy Tactics (USA)
+repo: https://github.com/Kyagara/tactical-decomp
+platform: psx
+versions:
+- name: us
+  fullname: "USA"
+  sha1: d181756f0a8f33349a5b4eae0e9c856f926eb16c
+  paths:
+    target: "rom/extracted/baserom/SCUS_942.21"
+    build_dir: "build"
+    map: "rom/extracted/baserom/SCUS_942.21.map"
+    compiled_target: "build/SCUS_942.21.bin"
+    elf: "build/SCUS_942.21.exe"
+    asm: "rom/extracted/asm"
+    nonmatchings: "rom/extracted/asm/nonmatchings"

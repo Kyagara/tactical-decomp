@@ -1,0 +1,58 @@
+name: OPTION.OUT
+sha1: 624378b22c6ec0eb9eb853467ad4c198ef04c00d
+options:
+  basename: OPTION.OUT
+  target_path: rom/extracted/baserom/EVENT/OPTION.OUT
+  elf_path: build/blobs/event_OPTION/event_OPTION.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_OPTION
+
+  ld_script_path: build/blobs/event_OPTION/event_OPTION.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/OPTION.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_OPTION/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_OPTION/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: OPTION
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, c, OPTION]
+
+  - name: OPTION_data
+    type: data
+    align: 0
+    start: 0x4450
+    vram: 0x80064450
+    subsegments:
+      - [0x4450, data, OPTION_data]
+
+  - [0xD4EC]

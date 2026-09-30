@@ -1,0 +1,58 @@
+name: E174.BIN
+sha1: 93f106dc8e3735b9f5e141c0d1ccd587e76b6f1b
+options:
+  basename: E174.BIN
+  target_path: rom/extracted/baserom/EFFECT/E174.BIN
+  elf_path: build/blobs/effect_E174/effect_E174.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E174
+
+  ld_script_path: build/blobs/effect_E174/effect_E174.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E174.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E174/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E174/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E174
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E174]
+
+  - name: E174_data
+    type: data
+    align: 0
+    start: 0x323C
+    vram: 0x801C573C
+    subsegments:
+      - [0x323C, data, E174_data]
+
+  - [0x175BC]

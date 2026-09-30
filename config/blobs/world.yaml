@@ -1,0 +1,68 @@
+name: WORLD.BIN
+sha1: 507ce0a857146115a18f51b0099898cc9aed7fe4
+options:
+  basename: WORLD.BIN
+  target_path: rom/extracted/baserom/WORLD/WORLD.BIN
+  elf_path: build/blobs/world/world.elf
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/world
+  src_path: src/blobs/world
+  build_path: build/blobs/world
+
+  ld_script_path: build/blobs/world/world.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/world.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/world/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/world/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+segments:
+  - name: world_tables
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x800E0000
+    subsegments:
+      - [0x0, data, world_tables]
+
+  - name: world
+    type: code
+    align: 0
+    start: 0x228
+    vram: 0x800E0228
+    subsegments:
+      - [0x228, c, world]
+      - [0x16E68, c, world_2]
+      - [0x35D6C, c, world_3]
+      - [0x4D92C, c, world_4]
+      - [0x4EBD0, c, world_5]
+
+  - name: world_data
+    type: data
+    align: 0
+    start: 0x5A300
+    vram: 0x8013A300
+    subsegments:
+      - [0x5A300, data, world_data]
+
+  - [0xED958]

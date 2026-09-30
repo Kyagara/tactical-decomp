@@ -1,0 +1,22 @@
+[submodule "tools/third_party/m2c"]
+	path = tools/third_party/m2c
+	url = https://github.com/matt-kempster/m2c.git
+[submodule "tools/third_party/maspsx"]
+	path = tools/third_party/maspsx
+	url = https://github.com/mkst/maspsx.git
+[submodule "tools/third_party/asm-differ"]
+	path = tools/third_party/asm-differ
+	url = https://github.com/simonlindholm/asm-differ.git
+[submodule "tools/third_party/decomp-permuter"]
+	path = tools/third_party/decomp-permuter
+	url = https://github.com/simonlindholm/decomp-permuter.git
+[submodule "tools/third_party/coddog"]
+	path = tools/third_party/coddog
+	url = https://github.com/ethteck/coddog.git
+[submodule "recomp/psxrecomp"]
+	path = recomp/psxrecomp
+	url = https://github.com/RetroPortingToolKit/psxrecomp.git
+[submodule "recomp/recomp-ui"]
+	path = recomp/recomp-ui
+	url = https://github.com/RetroPortingToolKit/recomp-ui.git
+	branch = master

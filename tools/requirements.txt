@@ -1,0 +1,24 @@
+# splat64 + deps (MIPS binary splitter).
+splat64[mips]
+spimdisasm
+pycdlib
+
+# m2c deps
+pycparser>=2.21,<3
+
+# asm-differ deps (mirrors tools/asm-differ/pyproject.toml; ansiwrap was
+# removed upstream 2025-01-08)
+colorama
+watchdog
+levenshtein
+cxxfilt
+
+# decomp-permuter deps (README: pynacl/toml/Levenshtein; pynacl only for
+# permuter@home networking, not needed locally)
+toml
+
+# mapfile_parser: Decompollaborate map-file parser + CLI frontends (first_diff,
+# sym_info, bss_check, ...). Used via the tools/mapfile wrapper. Auto-reads
+# decomp.yaml for map/rom paths.
+mapfile_parser>=2.13,<3.0.0
+

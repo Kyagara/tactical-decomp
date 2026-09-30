@@ -1,0 +1,58 @@
+name: E230.BIN
+sha1: 99a8c3e4230cf316a465dd2ce4a3c63471f47001
+options:
+  basename: E230.BIN
+  target_path: rom/extracted/baserom/EFFECT/E230.BIN
+  elf_path: build/blobs/effect_E230/effect_E230.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E230
+
+  ld_script_path: build/blobs/effect_E230/effect_E230.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E230.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E230/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E230/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E230
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E230]
+
+  - name: E230_data
+    type: data
+    align: 0
+    start: 0x1A5C
+    vram: 0x801C3F5C
+    subsegments:
+      - [0x1A5C, data, E230_data]
+
+  - [0x1543C]

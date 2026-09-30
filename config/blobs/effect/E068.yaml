@@ -1,0 +1,58 @@
+name: E068.BIN
+sha1: c06e59e13ed3aee7722b6a4715205cd93b704bc1
+options:
+  basename: E068.BIN
+  target_path: rom/extracted/baserom/EFFECT/E068.BIN
+  elf_path: build/blobs/effect_E068/effect_E068.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E068
+
+  ld_script_path: build/blobs/effect_E068/effect_E068.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E068.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E068/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E068/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E068
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E068]
+
+  - name: E068_data
+    type: data
+    align: 0
+    start: 0x1710
+    vram: 0x801C3C10
+    subsegments:
+      - [0x1710, data, E068_data]
+
+  - [0x157BC]

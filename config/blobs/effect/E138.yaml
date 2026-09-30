@@ -1,0 +1,58 @@
+name: E138.BIN
+sha1: 8f6d7fa5c4b40fb159102e2605e4839414de7103
+options:
+  basename: E138.BIN
+  target_path: rom/extracted/baserom/EFFECT/E138.BIN
+  elf_path: build/blobs/effect_E138/effect_E138.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E138
+
+  ld_script_path: build/blobs/effect_E138/effect_E138.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E138.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E138/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E138/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E138
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E138]
+
+  - name: E138_data
+    type: data
+    align: 0
+    start: 0x14F8
+    vram: 0x801C39F8
+    subsegments:
+      - [0x14F8, data, E138_data]
+
+  - [0xCDC8]

@@ -1,0 +1,66 @@
+name: ETC.OUT
+sha1: d8e353b15a52fc799bcc2d9f14519ae8f60a2909
+options:
+  basename: ETC.OUT
+  target_path: rom/extracted/baserom/EVENT/ETC.OUT
+  elf_path: build/blobs/event_ETC/event_ETC.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_ETC
+
+  ld_script_path: build/blobs/event_ETC/event_ETC.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/ETC.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_ETC/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_ETC/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: ETC_hdr
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, ETC_hdr]
+
+  - name: ETC
+    type: code
+    align: 0
+    start: 0x1C
+    vram: 0x8006001C
+    subsegments:
+      - [0x1C, c, ETC]
+
+  - name: ETC_data
+    type: data
+    align: 0
+    start: 0x1648
+    vram: 0x80061648
+    subsegments:
+      - [0x1648, data, ETC_data]
+
+  - [0x1D7C]

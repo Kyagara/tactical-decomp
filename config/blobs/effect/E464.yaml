@@ -1,0 +1,58 @@
+name: E464.BIN
+sha1: 556dd0ae6ee2d9e3079ce39c7e42234a83956b86
+options:
+  basename: E464.BIN
+  target_path: rom/extracted/baserom/EFFECT/E464.BIN
+  elf_path: build/blobs/effect_E464/effect_E464.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E464
+
+  ld_script_path: build/blobs/effect_E464/effect_E464.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E464.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E464/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E464/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E464
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E464]
+
+  - name: E464_data
+    type: data
+    align: 0
+    start: 0x28C4
+    vram: 0x801C4DC4
+    subsegments:
+      - [0x28C4, data, E464_data]
+
+  - [0xE940]

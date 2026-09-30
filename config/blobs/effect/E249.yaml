@@ -1,0 +1,58 @@
+name: E249.BIN
+sha1: 2364be1f2077da537e5454e57e9d17ad9ad69e1c
+options:
+  basename: E249.BIN
+  target_path: rom/extracted/baserom/EFFECT/E249.BIN
+  elf_path: build/blobs/effect_E249/effect_E249.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E249
+
+  ld_script_path: build/blobs/effect_E249/effect_E249.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E249.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E249/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E249/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E249
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E249]
+
+  - name: E249_data
+    type: data
+    align: 0
+    start: 0x14F8
+    vram: 0x801C39F8
+    subsegments:
+      - [0x14F8, data, E249_data]
+
+  - [0xCF1C]

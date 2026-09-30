@@ -1,0 +1,58 @@
+name: E469.BIN
+sha1: fef26a41abd6ec2644a0c2a8d35bddc22164b6b4
+options:
+  basename: E469.BIN
+  target_path: rom/extracted/baserom/EFFECT/E469.BIN
+  elf_path: build/blobs/effect_E469/effect_E469.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E469
+
+  ld_script_path: build/blobs/effect_E469/effect_E469.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E469.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E469/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E469/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E469
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E469]
+
+  - name: E469_data
+    type: data
+    align: 0
+    start: 0x195C
+    vram: 0x801C3E5C
+    subsegments:
+      - [0x195C, data, E469_data]
+
+  - [0xCE0C]

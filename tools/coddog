@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# Thin wrapper around coddog (https://github.com/ethteck/coddog), the function
+# matcher / cluster / submatch tool. coddog is built from its git submodule
+# under tools/third_party/coddog; this wrapper builds the release binary
+# lazily on first use, then forwards all args to it.
+#
+# Usage (run from repo root so decomp.yaml is found):
+#   ./tools/coddog match func_80010A24 -t 0.7
+#   ./tools/coddog cluster
+#   ./tools/coddog submatch func_80010A24
+#
+# Blob mode: match/cluster/submatch read "the project in the current
+# directory", and the repo-root decomp.yaml covers the exe only, so blobs
+# were invisible to coddog. --blob points coddog at a generated per-blob
+# config (tools/scripts/coddog_yaml.py) instead. Requires
+# `make BLOB=<blob> build` to have run at least once (coddog reads the
+# blob ELF + stub stems, mirroring the exe flow):
+#   ./tools/coddog --blob event_ETC match func_80060000 -t 0.7
+#   BLOB=battle ./tools/coddog cluster -t 0.9
+#   ./tools/coddog yaml event_ETC   # print the generated decomp.yaml path
+# (compare2/compare-n/compare-raw take explicit yaml paths, so combine them
+# with the helper: ./tools/coddog compare-raw QUERY.BIN $(./tools/coddog yaml battle))
+#
+# Requires `make build` to have run at least once for the exe: coddog reads
+# build/SCUS_942.21.exe (ELF) + rom/extracted/baserom/SCUS_942.21.map (GNU map) per decomp.yaml.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SUB="$ROOT/tools/third_party/coddog"
+BIN="$SUB/target/release/coddog"
+PATCH="$ROOT/tools/third_party/coddog-compare-raw.patch"
+PY="$ROOT/tools/.venv/bin/python"
+
+# compare-raw bounds fix: upstream panics slicing past the query tail when a
+# hashed window matches a symbol longer than the remaining opcodes
+# (range end index out of range for slice). Applied once, then the binary is
+# rebuilt below. The submodule stays clean in git: the patch lives in-repo,
+# like tools/third_party/maspsx-gp_rel.patch.
+if [ -f "$PATCH" ] \
+    && ! grep -q "i + symbol.opcodes.len() <= opcodes.len()" \
+        "$SUB/crates/cli/src/main.rs" 2>/dev/null; then
+    echo "[coddog] applying compare-raw bounds fix..."
+    patch -p1 -d "$SUB" < "$PATCH"
+    rm -f "$BIN" # force rebuild below
+fi
+
+if [ ! -x "$BIN" ]; then
+    if [ ! -d "$SUB/.git" ] && [ ! -e "$SUB/Cargo.toml" ]; then
+        echo "[coddog] submodule not found at $SUB" >&2
+        echo "[coddog] run: git submodule update --init tools/third_party/coddog" >&2
+        exit 1
+    fi
+    echo "[coddog] binary not built yet; building from submodule (one-time, may take a while)..."
+    (cd "$SUB" && cargo build --release)
+fi
+
+# --blob/-B (or $BLOB, Makefile-style) selects a blob project; `yaml` prints
+# a blob's generated decomp.yaml path for the explicit-yaml subcommands.
+BLOB="${BLOB:-}"
+ARGS=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --blob|-B) BLOB="${2:?--blob needs a blob name}"; shift 2 ;;
+        --blob=*) BLOB="${1#--blob=}"; shift ;;
+        *) ARGS+=("$1"); shift ;;
+    esac
+done
+
+if [ "${ARGS[0]:-}" = "yaml" ]; then
+    exec "$PY" "$ROOT/tools/scripts/coddog_yaml.py" "${ARGS[1]:-$BLOB}"
+fi
+
+if [ -n "$BLOB" ]; then
+    case "${ARGS[0]:-}" in
+        match|cluster|submatch)
+            YAML="$("$PY" "$ROOT/tools/scripts/coddog_yaml.py" "$BLOB")"
+            cd "$(dirname "$YAML")" # scan_for_config finds this decomp.yaml
+            exec "$BIN" ${ARGS[@]+"${ARGS[@]}"}
+            ;;
+        *)
+            echo "[coddog] --blob only applies to match|cluster|submatch" >&2
+            echo "[coddog] for compare*: ./tools/coddog compare-raw QUERY_BIN \$(\"./tools/coddog\" yaml \"$BLOB\")" >&2
+            exit 1
+            ;;
+    esac
+fi
+
+exec "$BIN" ${ARGS[@]+"${ARGS[@]}"}

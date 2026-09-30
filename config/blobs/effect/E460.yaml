@@ -1,0 +1,58 @@
+name: E460.BIN
+sha1: 3d2cfd9e148a1e926e2abca5fb9521ce2c6a71e2
+options:
+  basename: E460.BIN
+  target_path: rom/extracted/baserom/EFFECT/E460.BIN
+  elf_path: build/blobs/effect_E460/effect_E460.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E460
+
+  ld_script_path: build/blobs/effect_E460/effect_E460.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E460.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E460/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E460/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E460
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E460]
+
+  - name: E460_data
+    type: data
+    align: 0
+    start: 0x774
+    vram: 0x801C2C74
+    subsegments:
+      - [0x774, data, E460_data]
+
+  - [0xC6D8]

@@ -1,0 +1,16 @@
+--- maspsx-pure/maspsx/__init__.py	2026-08-14 00:59:52.948709616 -0300
++++ b/maspsx/__init__.py	2026-08-14 00:30:31.529981628 -0300
+@@ -184,7 +184,12 @@
+ 
+ 
+ def parse_load_or_store(rest: str):
+-    if match := re.match(r"(\$[a-z0-9]+),\s*%lo\(([^(]+)\)\(([^(]+)\)", rest):
++    if match := re.match(r"(\$[a-z0-9]+),\s*%gp_rel\(([^(]+)\)\(\$gp\)", rest):
++        # e.g. lw $4,%gp_rel(D_800329FC)($gp) -- leave for the assembler
++        r_dest, operand = match.group(1, 2)
++        r_source = None
++        needs_expanding = False
++    elif match := re.match(r"(\$[a-z0-9]+),\s*%lo\(([^(]+)\)\(([^(]+)\)", rest):
+         r_dest, operand, r_source = match.group(1, 2, 3)
+         needs_expanding = False
+     elif match := re.match(r"(\$[a-z0-9]+),\s*([^(]+)\(([^)]+)\)", rest):

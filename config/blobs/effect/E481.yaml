@@ -1,0 +1,58 @@
+name: E481.BIN
+sha1: 8b3fd645addfc6d1b61aa680dccfab08cfced5cf
+options:
+  basename: E481.BIN
+  target_path: rom/extracted/baserom/EFFECT/E481.BIN
+  elf_path: build/blobs/effect_E481/effect_E481.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E481
+
+  ld_script_path: build/blobs/effect_E481/effect_E481.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E481.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E481/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E481/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E481
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E481]
+
+  - name: E481_data
+    type: data
+    align: 0
+    start: 0x77C
+    vram: 0x801C2C7C
+    subsegments:
+      - [0x77C, data, E481_data]
+
+  - [0x7BA0]

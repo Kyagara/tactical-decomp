@@ -1,0 +1,66 @@
+name: JOBSTTS.OUT
+sha1: 03f9331f67036c55f635c907295f2686303de5df
+options:
+  basename: JOBSTTS.OUT
+  target_path: rom/extracted/baserom/EVENT/JOBSTTS.OUT
+  elf_path: build/blobs/event_JOBSTTS/event_JOBSTTS.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/event
+  src_path: src/blobs/event
+  build_path: build/blobs/event_JOBSTTS
+
+  ld_script_path: build/blobs/event_JOBSTTS/event_JOBSTTS.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/event/JOBSTTS.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/event_JOBSTTS/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/event_JOBSTTS/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: event
+
+segments:
+  - name: JOBSTTS_hdr
+    type: data
+    align: 0
+    start: 0x0
+    vram: 0x80060000
+    subsegments:
+      - [0x0, data, JOBSTTS_hdr]
+
+  - name: JOBSTTS
+    type: code
+    align: 0
+    start: 0x4
+    vram: 0x80060004
+    subsegments:
+      - [0x4, c, JOBSTTS]
+
+  - name: JOBSTTS_data
+    type: data
+    align: 0
+    start: 0x6028
+    vram: 0x80066028
+    subsegments:
+      - [0x6028, data, JOBSTTS_data]
+
+  - [0x1B85C]

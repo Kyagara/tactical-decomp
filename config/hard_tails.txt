@@ -1,0 +1,62 @@
+# Hard-tail registry: stubs that resist byte-exact C89 decompilation.
+# Format: <func name> // <cause>.  The picker excludes these from
+# default pick lists (override with --include-hard-tails).
+#
+# Structural (never C):
+# crt0/boot thunks:
+func_80010A24 // 3 insns, `j` to a value: unmatchable
+func_80010A30 // Start boot code (RAM zero loop, KSEG0 sp setup, sp/$gp/$fp writes, break)
+# $sp touch + tail jump (GetStackPointer):
+func_80011BC0 // lw $sp + j GameLoop: C89 can express neither
+# jtbl alignment + merged rodata:
+func_80011E38 // jtbl `.align 3` divergence: the jump table is not naturally aligned, so the stub carries an extra word; also carries merged .rodata (jtbl_80010014 + the function in one stub), so unlinking it perturbs .rodata. 3 insns short in situ, 79 differing. See docs/MEASUREMENT-VALIDITY.md "a splat stub can run past the function end".
+# %gp_rel allocator (only %gp_rel code in main):
+func_80014358 // merged tail + %gp_rel stores
+# CARD family (PSYQ trampoline / BIOS A-calls):
+func_800288C4 // _patch_card dispatcher (PSYQ): lui v0,D_800288D8 / jr v0 (runtime-patched, thunk by design)
+func_80028780 // _card_clear (PSYQ): prologue saves s0 before ra; GCC saves ra first, delay slot fill differs
+func_800289D4 // CardPatchCardSpecificDelay (PSYQ): BIOS A-call asm pattern (~50 insns)
+func_80028A64 // _ExitCard (PSYQ): BIOS A-call (jalr t2 0xB0/0x56) + global-ra save/restore (D_800329E0), copy loop to D_80028ACC/D_80028AD8
+# trampoline fragments / padding:
+func_80028740 // addiu t2,0xA0 / jr t2 / addiu t1,0xAB (post_trampolines)
+func_80028760 // jumps into post_trampolines, no full body
+func_80028AE4 // segment-boundary padding (post_trampolines tail)
+# BIOS thunk family (addiu t2,X / jr t2 / addiu t1,Y), thunk by design:
+func_80021F14 // CdInitHeap
+func_80021F24 // CdFlushCache
+func_80021F34 // CdBuInit
+func_8002228C // Puts
+func_8002229C // Setjmp
+func_800222AC // Strcat
+func_800222BC // Strcmp
+func_800222CC // Strcpy
+func_800222DC // Bcopy
+func_800222EC // Bzero
+func_800222FC // Memset
+func_8002230C // Rand
+func_8002231C // Srand
+func_8002232C // Printf
+func_80022B98 // Strlen
+func_80022BA8 // Memchr
+func_80026F84 // GPUCwMemcpy
+func_80026F94 // BIOS thunk, no applied name (symbol_addrs force_not_migration)
+func_800287B8 // CardWrite
+func_800287C8 // CardNewCard
+func_80028894 // BIOS thunk, no applied name (symbol_addrs force_not_migration)
+func_800288A4 // BIOS thunk, no applied name (symbol_addrs force_not_migration)
+func_800288B4 // BIOS thunk, no applied name (symbol_addrs force_not_migration)
+# self-call loop:
+func_800289A4 // self-referential jalr + countdown loop (0xC8 to 0): GCC doesn't produce self-calls
+# hand-written epilogues / kernel entries:
+func_8001BFB4 // jr ra whose delay C fills with move, not addiu v0,zero (GTE-neighborhood hand asm)
+func_8001C268 // SquareRoot12 (PSYQ): tail return-0 block [jr; addiu v0,0] is hand asm (GCC emits move v0,0)
+func_8001DAD0 // COP0 kernel entry (splat Handwritten: $k0/$at/mfc0 $13, nops), not COP2/game C
+func_8001BEB8 // GTEInitGeom: COP0 Status CU2 enable (mfc0/mtc0 $12) + ctc2 init block, handwritten
+func_8001CBA4 // GTEPopMatrix: handwritten $at/lui patterns + ctc2 restores with explicit nops
+#
+# Allocator / scheduling stalemates (try make permute FUNC=<name>):
+func_80017118 // prologue home order: the oracle's `sw` order is the global-allocno list order and reaching it needs an allocno permutation no C shape in this neighbourhood produces; 193/193 insns, 6-8 differing, ~620 probes exhausted. The `lh`/`lhu` and `sum` clusters ARE solved (see docs/parked/func_80017118_seed.c); the residue is the 6-word `sw` order.
+#
+# Dropped as matched (real C definitions in src/main.c): func_80010AD0,
+# SetProgramRunning (func_80010B40), PutStackPointer (func_80011BB0).
+# Dropped as dead (no live stub; D_8001D1D4 is rodata): GTELightColor.

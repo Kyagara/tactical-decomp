@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Thin wrapper around mapfile_parser (https://github.com/Decompollaborate/
+# mapfile_parser) frontends. All frontends auto-load decomp.yaml (repo root)
+# to resolve map/rom paths via `-v us` (the single project version).
+#
+# Usage (run from repo root):
+#   ./tools/mapfile sym_info <func_or_addr>   # symbol/address lookup from the map
+#   ./tools/mapfile first_diff                # first built-vs-base byte diff, mapped to a symbol
+#   ./tools/mapfile bss_check                 # BSS reorder check vs the rom/expected baseline
+#   ./tools/mapfile <other-frontend> ...      # any other mapfile_parser utility
+#
+# first_diff: the expected ROM is the original baserom (rom/extracted/baserom),
+# and the expected MAP is reused from the built map (its layout matches the base
+# since the asm stubs reproduce the original bytes), so the symbol reported at
+# the first differing byte is correct. PSX is little-endian, so -e little.
+#
+# bss_check: needs a baseline map of a known-good build. That baseline lives at
+# rom/expected/SCUS_942.21.map (gitignored); create it with
+# tools/bin/update_expected.sh after a verified-good `make build`.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if command -v mapfile_parser >/dev/null 2>&1; then
+  MF=mapfile_parser
+else
+  MF="$ROOT/tools/.venv/bin/mapfile_parser"
+fi
+
+MAP="$ROOT/rom/extracted/baserom/SCUS_942.21.map"
+BASE="$ROOT/rom/extracted/baserom/SCUS_942.21"
+EXPECTED="$ROOT/rom/expected/SCUS_942.21.map"
+
+case "${1:-}" in
+  first_diff)
+    shift
+    exec "$MF" first_diff -v us -e little "$MAP" "$BASE" "$@"
+    ;;
+  bss_check)
+    shift
+    if [ ! -f "$EXPECTED" ]; then
+      echo "[mapfile] no BSS baseline at $EXPECTED" >&2
+      echo "[mapfile] run: tools/bin/update_expected.sh   (after a verified-good make build)" >&2
+      exit 1
+    fi
+    exec "$MF" bss_check -v us "$EXPECTED" "$@"
+    ;;
+  *)
+    exec "$MF" "$@"
+    ;;
+esac

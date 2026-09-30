@@ -1,0 +1,127 @@
+name: SCUS_942.21
+sha1: d181756f0a8f33349a5b4eae0e9c856f926eb16c
+options:
+  basename: SCUS_942.21
+  target_path: rom/extracted/baserom/SCUS_942.21
+  elf_path: build/SCUS_942.21.elf
+  base_path: ..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/asm
+  src_path: src
+  build_path: build
+
+  ld_script_path: build/SCUS_942.21.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  gp_value: 0x800329BC
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  # include_asm.h is committed with repo-relative .include paths so it stays
+  # valid across checkouts. splat would rewrite it with an absolute path
+  # (parse_path resolves generated_asm_macros_directory against base_path),
+  # so stop regenerating the asm-macro headers and keep them hand-maintained.
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/symbol_addrs.txt
+  reloc_addrs_path:
+    - config/reloc_addrs.txt
+
+  undefined_funcs_auto_path: build/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+segments:
+  - name: header
+    type: header
+    start: 0x0
+
+  - name: main
+    type: code
+    align: 0
+    start: 0x800
+    vram: 0x80010000
+    subsegments:
+      - [0x800, .rodata, main]
+      - [0x1224, c, main]
+      - [0x8E5C, c, main_2]
+
+  - name: trampolines
+    type: data
+    align: 0
+    start: 0x12744
+    vram: 0x80021F44
+    link_section: .text
+    subsegments:
+      - [0x12744, data, trampolines]
+
+  - name: main_3
+    type: code
+    align: 0
+    start: 0x12914
+    vram: 0x80022114
+    subsegments:
+      - [0x12914, c, main_3]
+
+  - name: post_tramp_tail
+    type: data
+    align: 0
+    start: 0x192E8
+    vram: 0x80028AE8
+    subsegments:
+      - [0x192E8, data, post_tramp_tail]
+
+  - name: main_data
+    type: data
+    align: 0
+    start: 0x192F4
+    vram: 0x80028AF4
+    subsegments:
+      - [0x192F4, data, main_data]
+
+  - name: main_4
+    type: code
+    align: 0
+    start: 0x31134
+    vram: 0x80040934
+    subsegments:
+      - [0x31134, c, main_4]
+
+  - name: gap_ab
+    type: data
+    align: 0
+    start: 0x3613C
+    vram: 0x8004593C
+    subsegments:
+      - [0x3613C, data, gap_ab]
+
+  - name: main_5
+    type: code
+    align: 0
+    start: 0x4A054
+    vram: 0x80059854
+    subsegments:
+      - [0x4A054, c, main_5]
+
+  - name: tail_b
+    type: data
+    align: 0
+    start: 0x4F10C
+    vram: 0x8005E90C
+    subsegments:
+      - [0x4F10C, data, tail_b]
+
+  - [0x57000]

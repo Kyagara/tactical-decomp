@@ -1,0 +1,104 @@
+From: psxrecomp upstream base 0ffab1ceb9e3b42de9f87a7a416e8e8d95f64f00
+Subject: [FFT] spu.c - PMON (pitch modulation) voice step
+
+Game-owned framework patch. The pinned upstream parses PMON
+(0x1F801D90/92) for spu_status only and never applies it in synthesis,
+so FM-driven SFX render as the bare carrier (FFT cursor blip: silent v22
+modulates v23, 0x1F801D92=0x80 in the REG timeline). This adds the
+DuckStation-modelled step (factor from the previous voice's
+post-envelope output, voice 0 never modulated): s_pmon_prev_out chain
+state + init in spu_init + modulated phase step + per-sample publish.
+
+Status: committed IN the submodule as b2952537, on top of upstream base
+0ffab1ce; the superproject gitlink points at that local commit (see
+recomp/framework_pins.txt: psxrecomp / psxrecomp-upstream-base).
+Local-only: the submodule's origin push URL is no-push, so the commit
+lives in .git/modules/recomp/psxrecomp on this machine only.
+
+This file is the MIRROR of that commit, not the source of truth any
+more. It stays in-repo for the same reason as
+tools/third_party/maspsx-gp_rel.patch and
+tools/third_party/coddog-compare-raw.patch: the local commits are not on
+any remote, so this text is their only recovery path. recomp/CMakeLists.txt
+still lazy-applies it (marker grep + git apply --check) as a fallback for a
+pristine checkout of 0ffab1ce; with the submodule at b2952537 the marker
+grep matches and the block is a no-op.
+
+Recovering from a fresh clone (no fork remote): clone psxrecomp at
+0ffab1ce, git apply -p1 this file, git commit, and update
+recomp/framework_pins.txt + the superproject gitlink.
+
+Retire when: upstream spu.c applies PMON in synthesis. Then rebase the
+pin onto upstream, drop the local commit, and delete this file plus the
+CMake block.
+
+---
+diff --git a/runtime/src/spu.c b/runtime/src/spu.c
+index 0e3c0340..9d99ac23 100644
+--- a/runtime/src/spu.c
++++ b/runtime/src/spu.c
+@@ -108,6 +108,14 @@ static SweepEnv sweep_main_env[2];                    /* [0=L 1=R] */
+ /* External vblank counter (debug_server.c) used as event timestamp. */
+ extern uint64_t s_frame_count;
+ 
++/* ---- Game-owned PMON (pitch modulation) voice chain --------------------
++ * Upstream spu.c parses PMON (0x1F801D90/92) for spu_status only and never
++ * applies it in synthesis, so FM-driven SFX render as the bare carrier.
++ * This override adds the DuckStation-modelled step (factor from the previous
++ * voice's post-envelope output, voice 0 never modulated). See
++ * recomp/patches/psxrecomp/0ffab1ce-spu-pmon.patch. */
++static int16_t s_pmon_prev_out; /* shaped output of voice idx-1 this sample */
++
+ /* ---- Always-on event ring -------------------------------------------- */
+ /* 1M entries × ~32B = 32 MB. Power of 2 so wrap is a mask. Beetle peaks at
+  * a few hundred audible-voice events per chime second; recomp at <1k total
+@@ -806,7 +814,12 @@ int         spu_shadow_tap_count(void)  { return s_shadow_tap_frame; }
+ 
+ static int16_t voice_next_sample(int idx) {
+     SpuVoice *v = &voices[idx];
+-    if (!v->active) return 0;
++    if (!v->active) {
++        /* Inactive modulator contributes silence (mirrors DuckStation, whose
++         * last_volume is assigned 0 on the muted path every sample). */
++        s_pmon_prev_out = 0;
++        return 0;
++    }
+ 
+     if (v->sample_idx >= SPU_BLOCK_SAMPLES) {
+         if (v->flags & 0x01u) {
+@@ -899,13 +912,25 @@ static int16_t voice_next_sample(int idx) {
+      * bytes past their own repeat address and turned the menu into a
+      * continuous mid-band buzz. DuckStation and Beetle both just add the
+      * pitch to the counter, so zero holds. */
+-    uint32_t pitch = voice_reg(idx, 2) & 0x3FFFu;
+-    v->phase += pitch;
++    uint32_t step = voice_reg(idx, 2) & 0x3FFFu;
++    if (idx > 0) {
++        uint32_t pmon = (uint32_t)spu_regs[reg_index(0x1F801D90u)]
++                      | ((uint32_t)spu_regs[reg_index(0x1F801D92u)] << 16);
++        if (pmon & (1u << (uint32_t)idx)) {
++            int32_t factor = (int32_t)s_pmon_prev_out + 0x8000;
++            step = (uint32_t)(((uint32_t)step * (uint32_t)factor) >> 15);
++            if (step > 0x3FFFu) step = 0x3FFFu;
++        }
++    }
++    v->phase += step;
+     while (v->phase >= 0x1000u) {
+         v->phase -= 0x1000u;
+         v->sample_idx++;
+         if (v->sample_idx >= SPU_BLOCK_SAMPLES) break;
+     }
++    /* Publish post-envelope output for the next voice's PMON step. The mix
++     * loop walks voices ascending, so idx-1 is always this sample's value. */
++    s_pmon_prev_out = (int16_t)shaped;
+     return (int16_t)shaped;
+ }
+ 
+@@ -952,6 +977,7 @@ void spu_init(void) {
+     memset(spu_regs, 0, sizeof(spu_regs));
+     memset(voices, 0, sizeof(voices));
+     memset(s_events, 0, sizeof(s_events));
++    s_pmon_prev_out = 0;
+     transfer_addr = 0;
+     key_on_count = 0;
+     render_frames = 0;

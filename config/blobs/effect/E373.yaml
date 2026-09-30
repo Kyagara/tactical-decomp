@@ -1,0 +1,58 @@
+name: E373.BIN
+sha1: ef3474555951ac41a75c0df943742f63b0611195
+options:
+  basename: E373.BIN
+  target_path: rom/extracted/baserom/EFFECT/E373.BIN
+  elf_path: build/blobs/effect_E373/effect_E373.elf
+  base_path: ../../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: rom/extracted/blobs/effect
+  src_path: src/blobs/effect
+  build_path: build/blobs/effect_E373
+
+  ld_script_path: build/blobs/effect_E373/effect_E373.ld
+  ld_dependencies: True
+  ld_align_section_vram_end: False
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+
+  symbol_addrs_path:
+    - config/blobs/effect/E373.symbols.txt
+
+  undefined_funcs_auto_path: build/blobs/effect_E373/undefined_funcs_auto.txt
+  undefined_syms_auto_path: build/blobs/effect_E373/undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+family: effect
+
+segments:
+  - name: E373
+    type: code
+    align: 0
+    start: 0x0
+    vram: 0x801C2500
+    subsegments:
+      - [0x0, c, E373]
+
+  - name: E373_data
+    type: data
+    align: 0
+    start: 0x28D0
+    vram: 0x801C4DD0
+    subsegments:
+      - [0x28D0, data, E373_data]
+
+  - [0xE9B8]
